@@ -1,0 +1,20 @@
+{
+  "name": "gridview",
+  "version": "0.1.0",
+  "description": "利用Grid布局实现九宫格",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
+  "author": "zprial",
+  "license": "ISC",
+  "dependencies": {
+    "hammerjs": "^2.0.8",
+    "lodash.chunk": "^4.2.0",
+    "parcel-bundler": "^1.12.3"
+  },
+  "devDependencies": {
+    "typescript": "^3.3.4000"
+  },
+  "typings": "index.d.ts"
+}

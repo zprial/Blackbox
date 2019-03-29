@@ -1,0 +1,16 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "clean": "lerna clean",
+    "bs": "lerna bootstrap"
+  },
+  "devDependencies": {
+    "lerna": "^3.13.1",
+    "parcel-bundler": "^1.12.3",
+    "serve": "^10.1.2"
+  }
+}
