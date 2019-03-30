@@ -1,18 +1,10 @@
 import _chunk from 'lodash.chunk';
+import { multiCSS } from './util'
 
 const defaultOptions = {
-  rows: 3,
-  columns: 3,
+  size: 3,
   cover: require('./demo.png'),
   blockSize: '100px'
-}
-
-function simpleGetUnit(str: string = '') {
-  const value = parseFloat(str) || 0;
-  return {
-    value,
-    unit: str.replace(String(value), '') || '';
-  }
 }
 
 export default class GridView {
@@ -37,38 +29,40 @@ export default class GridView {
 
   // Generate Grid By Options
   private generateGrid() {
-    const { rows, columns, cover, blockSize } = this._options;
-    const blockSizeObj = simpleGetUnit(blockSize)
+    const { size, cover, blockSize } = this._options;
 
     this.target.style.cssText = `
       display: inline-grid;
-      grid-template-rows: repeat(${rows}, ${blockSize});
-      grid-template-columns: repeat(${columns}, ${blockSize});
+      grid-gap: 1px;
+      gap: 1px;
+      grid-template-rows: repeat(${size}, ${blockSize});
+      grid-template-columns: repeat(${size}, ${blockSize});
     `;
     // The total count of blocks
-    const TOTAL_COUNT = rows * columns - 1;
+    const TOTAL_COUNT = size ** 2 - 1;
     for (let i = 0; i < TOTAL_COUNT; i++) {
       const div = document.createElement('div');
       const blockName = `block${i}`;
       this._blockNames.push(blockName);
-      const remainder = i % rows;
-      console.log('remainder:', remainder)
+      // Calc cover's position for every block
+      const _xIndex = i % size;
+      const _yIndex = parseInt(String(i / size));
       div.style.cssText = `
         grid-area: ${blockName};
-        background: url("${cover}") -${remainder * blockSizeObj.value}${blockSizeObj.unit} no-repeat left top;
-        background-size: cover;
+        background: url("${cover}") -${multiCSS(_xIndex, blockSize)} -${multiCSS(_yIndex, blockSize)} no-repeat;
+        background-size: ${multiCSS(size, blockSize)}
       `;
       this.target.appendChild(div);
     }
     this._blockNames.push('.');
     // Random this._blockName when first layout
-    this._blockNames.sort((b1, b2) => Math.random() > 0.5 ? 1 : -1);
+    this._blockNames.sort(() => Math.random() > 0.5 ? 1 : -1);
   }
 
   // Layout Grid By grid-template-area
   public layoutGrid(layouts: string[] = this._blockNames) {
-    const { columns } = this._options;
-    const chunks = _chunk(layouts, columns)
+    const { size } = this._options;
+    const chunks = _chunk(layouts, size)
     this.target.style.gridTemplateAreas = chunks.map(chunk => `'${chunk.join(' ')}'`).join(' ');
   }
 
