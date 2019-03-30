@@ -5,5 +5,6 @@
 ## Command
 
 ```bash
+  $ npm install
   $ npm start
 ```
